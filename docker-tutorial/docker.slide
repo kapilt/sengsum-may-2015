@@ -1,0 +1,12 @@
+Get started with Docker
+
+* Background
+
+#
+
+
+* Namespaces
+
+- user namespaces (docker 1.7)
+- network namespaces
+- 
