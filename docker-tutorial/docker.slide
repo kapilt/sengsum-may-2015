@@ -1,12 +1,128 @@
 Get started with Docker
 
-* Background
+* Outline
 
-#
+ - Why Linux Containers
+ - Container Background
+ - 
+
+* Why Containers
+
+ - Dependency Hell
+
+* Many Payloads
+ - Microservices /
+ - Backends in multiple languages
+ - databases / bigdata
+ - webapps
+
+* Many Targets
+
+ - Local Dev
+ - Cloud Dev
+ - Staging Servers
+ - CI/CD Pipelines
+ - Baremetal
+ - etc
+
+* Separation of Concerns
+
+ Developer . Inside the Container
+  - my code
+  - my library
+  - my packages
+  
+ Ops . Outside the container
+  - logging
+  - access
+  - monitoring
+  
+* How does it work
+
+Isolation with namespaces
+ 
+- (user) user namespaces (docker 1.7?)
+- (net) network namespaces
+- (mnt) filesystem
+- (pid) process
+- (user) ""
+- (ipc)
+- (uts)
+
+* How does it work
+
+Resource limits with cgroups
+
+- memory
+- cpu (acct and sets)
+- blkio
+- devices
+- net
+
+* Efficiency
+
+Almost no overhead
+
+- Process isolation
+
+- CPU Performance = native perf
+
+- IO Performance = native perf
+
+- cgroup accounting ~ 3%
 
 
-* Namespaces
+* Efficieny Filesystems
 
-- user namespaces (docker 1.7)
-- network namespaces
-- 
+- unionining filesystems (aufs, overlayfs)
+
+- snapshotting cow filesystems (btrfs, zfs)
+
+- cow via lvm/device mapper with thin provisioning
+
+
+* Efficiency storage
+
+ - provisiniong takes a few miliseconds
+
+ - ... and a few kilobytes
+
+ - new images / bases take a few seconds
+
+
+* Docker
+
+ - opensource engine to commoditize containers
+
+
+
+
+* Management Engines
+
+ - Kubernetes
+
+ - Swarm + Compose
+
+ - Flocker
+
+ - Containership.io
+
+ - Rancher.io
+
+ - +99 others
+
+* Other container engines
+
+ - Rkt (Rocket) from CoreOS
+   - standardize image format
+
+ - LXC
+   - grandpa of contaniners (along with openvz)
+   - cli and library based (c, golang, python, etc)
+   - support for image templates and images.
+   
+ - LXD
+  - golang api
+
+
+
