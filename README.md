@@ -3,12 +3,14 @@
 
 Tutorials on GoLang and Docker
 
-# GoLang Requirements
+# GoLang Talk
 
-GoLang 1.4
+Based heavily on the Go Team's Talks 2014/taste of go and
+2012/tutorial and is licensed under the same terms (BSD).
 
-Note GoLang slides based heavily on upstream golang community slides.
+Requirements - GoLang 1.4
 
-# Docker Requirements
+# Docker Talk
 
-Docker 1.6
+Requirements - Docker 1.6
+

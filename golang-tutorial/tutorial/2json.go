@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	resp, err := http.Get("http://reddit.com/r/golang.json")
+	resp, err := http.Get("http://summitserver.local/data/golang.json")	
 	if err != nil {
 		log.Fatal(err)
 	}

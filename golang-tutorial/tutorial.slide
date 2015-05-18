@@ -3,11 +3,13 @@ Get started with Go
 
 * Background
 
+.image tutorial/gopher.jpg
+
 # In this tutorial I'll show you the basics of using the Go Programming Language.
 
 * What is Go?
 
-Go is a new, general-purpose programming language.
+Go is a "new", general-purpose programming language.
 
 - Compiled
 - Statically typed
@@ -17,20 +19,6 @@ Go is a new, general-purpose programming language.
 
 "Go is a wise, clean, insightful, fresh thinking approach to the greatest-hits subset of the well understood."
 - Michael T. Jones
-
-
-* Go
-
-A simple but powerful and fun language.
-
-- start with C, remove complex parts
-- add interfaces, concurrency
-- also: garbage collection, closures, reflection, strings, ...
-
-For more background on design:
-
-- [[http://commandcenter.blogspot.com/2012/06/less-is-exponentially-more.html][Less is exponentially more]]
-- [[http://talks.golang.org/2012/splash.article][Go at Google: Language Design in the Service of Software Engineering]]
 
 
 * Motivation
@@ -48,18 +36,55 @@ Started as an answer to software problems at Google:
 
 - Project starts at Google in 2007 (by Griesemer, Pike, Thompson)
 - Open source release in November 2009
-- More than 250 contributors join the project
+- More than 450 contributors join the project 
 - Version 1.0 release in March 2012
 
-# Go was originally built by a team at Google, led by Robert Griesemer, Rob Pike, and Ken Thompson. In November 2010, Go was launched publically as an open source project. Since then, a team at Google and more than 250 contributors from the open source community continued to improve the Go language, libraries, and tools.
+# Go was originally built by a team at Google, led by Robert Griesemer, Rob Pike, and Ken Thompson. In November 2009, Go was launched publically as an open source project. Since then, a team at Google and more than 450 contributors from the open source community continued to improve the Go language, libraries, and tools.
 
-# In March 2012, we announced Go 1, a version of the language and libraries that will be supported for years to come. 
+# In March 2012, Go 1, a version of the language and libraries that will be supported for years to come. 
 
-* Who uses Go besides Google?
+* Go
+
+A simple but powerful and fun language.
+
+- garbage collected
+- interfaces and composition over inheritance
+- go/coroutine based concurrency
+- explicit error handling & defer
+- also: closures, reflection, strings, ...
+- tons of helpful tools
+
+# no bad imports
+# fmt / tools
+# go pre 1.0 / source rewriting with go fix / go fmt / go generate
+# go race analyzer / go docs
+# go oracle
+# go refactor
+
+For more background on design:
+
+- [[http://commandcenter.blogspot.com/2012/06/less-is-exponentially-more.html][Less is exponentially more]]
+- [[http://talks.golang.org/2012/splash.article][Go at Google: Language Design in the Service of Software Engineering]]
+
+
+* Who uses Go?
 
 .link http://golang.org/wiki/GoUsers
 
 Apcera, Bitbucket, bitly, Canonical, CloudFlare, Core OS, Digital Ocean, Docker, Dropbox, Facebook, Getty Images, GitHub, Heroku, Iron.io, Kubernetes, Medium, MongoDB services, Mozilla services, New York Times, pool.ntp.org, Secret, SmugMug, SoundCloud, Stripe, Square, Thomson Reuters, Tumblr, ...
+
+
+* Who uses Go?
+
+"Prediction: Go will become the dominant language for systems work in IaaS, Orchestration, and PaaS in 24 months. #golang"
+- Derek Collison, Founder CloudFoundry & Apcera
+
+.link https://twitter.com/derekcollison/status/245522124666716160
+
+""3/4 of new software we see is Golang based" 
+- Adrian Cockcroft, Architect @ Netflix, Tech Fellow @ Battery Ventures
+
+.link https://youtu.be/nMTaS07i3jk?t=2184
 
 
 * Getting started
@@ -327,7 +352,174 @@ Iterate over the `Children` slice, assigning the slice value to `child` on each 
 The `Println` call prints the item's `Title` followed by a newline.
 
 
-* Tidying up
+* Language Roundout
+
+* Types
+
+- Predeclared types, the usual suspects:
+	uint8 (byte), uint16, uint32, uint32, uint64,
+	int8, int16, int32, int32 (rune), int64,
+	float32, float64,
+	complex64, complex128,
+	uint, int, uintptr,
+	bool, string,
+	error  // not so usual
+
+- Composite types:
+	array, struct, pointer, function,
+	slice, map, channel
+
+- Abstract type:
+	interface
+
+* Custom Types
+
+- A type declaration defines a _new_ type:
+	type Weekday int
+	type Point struct {
+		x, y int
+	}
+
+- Anoymous fields for composition:
+      type Kitchen struct {
+           numOfPlates int 
+      }
+
+      type House struct {
+           Kitchen //anonymous field
+           numOfRooms int 
+      }
+
+      func main() {
+          h := House{Kitchen{10}, 3}
+          fmt.Println("House h has this many plates:", h.numOfPlates)
+      }
+
+* Slices
+
+	[]T  // slice of T
+
+- Descriptor for an underlying array segment
+- May grow and shrink
+- Has length and capacity
+- Assigning a slice copies the descriptor, not the underlying array
+
+Common slice operations:
+
+	len(s)
+	s[i]
+	s[i:j]
+	append(s, x)  // append element x to slice s and return new slice
+
+- Slices play the role of dynamically sized arrays
+- Widely used in Go code
+
+
+* Maps
+
+	map[K]V  // map K -> V
+
+- Map is a language-supplied hash table
+- Maps values of key type K to values of type V
+- Assigning a map copies the map reference, not the map contents
+
+
+* Interface types
+
+- Abstract
+- Define (possibly empty) set of method signatures
+- Values of _any_type_ that implement all methods of an interface can be assigned to a variable of that interface.
+
+Examples:
+
+	interface{}  // empty interface
+
+	interface {
+		String() string
+	}
+
+	interface {
+		Len() int
+		Swap(i, j int)
+		Less(i, j int) bool
+	}
+
+
+* Goroutines
+
+- The _go_ statement launches a function call as a goroutine
+	go f()
+	go f(x, y, ...)
+
+- A goroutine runs concurrently (but not necessarily in parallel)
+- A goroutine has its own stack
+
+
+* A simple example
+
+.code taste/concurrency1.go /f START/,/f END/
+
+Function f is launched as 3 different goroutines, all running concurrently:
+
+.play taste/concurrency1.go /main START/,/main END/
+
+
+* Communication via channels
+
+A channel type specifies a channel value type (and possibly a communication direction):
+
+	chan int
+	chan<- string  // send-only channel
+	<-chan T       // receive-only channel
+
+A channel is a variable of channel type:
+
+	var ch chan int
+	ch := make(chan int)  // declare and initialize with newly made channel
+
+A channel permits _sending_ and _receiving_ values:
+
+	ch <- 1   // send value 1 on channel ch
+	x = <-ch  // receive a value from channel ch (and assign to x)
+
+Channel operations synchronize the communicating goroutines.
+
+* Communicating goroutines
+
+Each goroutine sends its results via channel ch:
+
+.code taste/concurrency2.go /f START/,/f END/
+
+The main goroutine receives (and prints) all results from the same channel:
+
+.play taste/concurrency2.go /main START/,/main END/
+
+select statement to multiplex over multiple channels
+
+* Where to go from here
+
+Links for new go programmers
+.link http://dave.cheney.net/resources-for-new-go-programmers
+
+Learn Go:
+.link http://tour.golang.org 
+
+Go By Example
+.link https://gobyexample.com/
+
+Documentation and articles:
+.link http://golang.org/doc
+
+Standard library reference:
+.link http://golang.org/pkg
+
+Talks
+.link http://talks.golang.org
+
+
+* Questions?
+
+* Returning to programming exercises
 
 * Separation of concerns
 
@@ -658,6 +850,10 @@ Some ideas:
 Learn Go:
 
 .link http://tour.golang.org 
+
+Go By Example
+
+.link https://gobyexample.com/
 
 Documentation and articles:
 

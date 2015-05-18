@@ -34,7 +34,7 @@ type Item struct {
 }
 
 func Get(reddit string) ([]Item, error) {
-	url := fmt.Sprintf("http://reddit.com/r/%s.json", reddit) // HLurl
+	url := fmt.Sprintf("http://summitserver.local/data/%s.json", reddit) // HLurl
 	resp, err := http.Get(url)                                // HLget
 	if err != nil {
 		return nil, err // HLreturn

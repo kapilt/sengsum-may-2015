@@ -1,16 +1,30 @@
-Get started with Docker
+Docker, Docker, Docker
+Inside the world of Containers
+20 May 2015
+
+Kapil.Thangavelu@capitalone.com
+http://github.com/kapilt
+@kapilvt
+
 
 * Outline
 
  - Why Linux Containers
- - Container Background
- - 
+ - How do Containers Work
+ - Using Docker
+   - Running Containers
+   - Building/Publishing Containers
+   - Composing Containers
+ - Bonus Material
 
 * Why Containers
+
+ More contexet for students
 
  - Dependency Hell
 
 * Many Payloads
+
  - Microservices /
  - Backends in multiple languages
  - databases / bigdata
@@ -27,12 +41,13 @@ Get started with Docker
 
 * Separation of Concerns
 
- Developer . Inside the Container
+
+Developer -> Inside the Container
   - my code
   - my library
   - my packages
   
- Ops . Outside the container
+ Ops -> Outside the container
   - logging
   - access
   - monitoring
@@ -90,11 +105,20 @@ Almost no overhead
  - new images / bases take a few seconds
 
 
+
 * Docker
 
  - opensource engine to commoditize containers
 
+ - massive uptake / popularized containers
 
+ - rich ecosystem of tools on top
+
+
+* Docker Components
+
+
+ ..
 
 
 * Management Engines

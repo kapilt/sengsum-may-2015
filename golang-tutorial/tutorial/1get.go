@@ -10,7 +10,7 @@ import (
 )
 
 func main() { // HLfunc
-	resp, err := http.Get("http://reddit.com/r/golang.json") // HLget
+	resp, err := http.Get("http://summitserver.local/data/golang.json") // HLget
 	if err != nil {                                          // HLerr
 		log.Fatal(err) // HLerr
 	} // HLerr
