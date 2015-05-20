@@ -9,70 +9,101 @@ http://github.com/kapilt
 
 * Outline
 
- - Why Linux Containers
- - How do Containers Work
- - Using Docker
-   - Running Containers
-   - Building/Publishing Containers
-   - Composing Containers
- - Bonus Material
+- Why Linux Containers
+
+- How do Containers Work
+  - Namespaces
+  - Cgroups
+  - FS Layers
+  
+- Docker Practical
+  - Running Containers
+  - Building/Publishing Containers
+  - Composing Containers
+  - Storage / Volumes
+  - Networking
+
+- Bonus Material
 
 * Why Containers
 
- More contexet for students
+To Solve Application Delivery
+ 
+- How do we deploy apps to production?
 
- - Dependency Hell
+- How do we setup a development environment?
+
+- How do we install new software?
+
+- I've got 99 microservices and 5 servers
 
 * Many Payloads
 
- - Microservices /
- - Backends in multiple languages
- - databases / bigdata
- - webapps
+- Backends in multiple languages
+
+- databases / bigdata / caches
+
+- analytics / background workers
+
+- webapps
 
 * Many Targets
 
- - Local Dev
- - Cloud Dev
- - Staging Servers
- - CI/CD Pipelines
- - Baremetal
- - etc
+- Local Development
+
+- Cloud Environments 
+
+- Staging Servers
+
+- CI/CD Pipelines
+
+- Baremetal
+
+- etc
 
 * Separation of Concerns
 
-
-Developer -> Inside the Container
+_Developer_ - Inside the Container
   - my code
   - my library
   - my packages
   
- Ops -> Outside the container
+_Operations_ - Outside the container
   - logging
   - access
   - monitoring
-  
+  - network
+
 * How does it work
 
 Isolation with namespaces
  
-- (user) user namespaces (docker 1.7?)
 - (net) network namespaces
 - (mnt) filesystem
 - (pid) process
-- (user) ""
-- (ipc)
-- (uts)
+- (user) this is not the root we're looking for
+- (ipc) 
+- (uts) hostname
+
+Namespace Article
+
+.link http://lwn.net/Articles/531114/
 
 * How does it work
 
 Resource limits with cgroups
 
-- memory
-- cpu (acct and sets)
-- blkio
-- devices
-- net
+- memory (amount)
+- cpu (amount and binding)
+- blkio (rate limit)
+- devices (allowed to create)
+- net (classify and priority)
+
+Cgroups Documentation
+
+.link https://www.kernel.org/doc/Documentation/cgroups/
+
+Can specify both hard and soft limits, ie. allow bursting
 
 * Efficiency
 
@@ -84,44 +115,133 @@ Almost no overhead
 
 - IO Performance = native perf
 
-- cgroup accounting ~ 3%
+- CGroup accounting ~ 3%
 
+* Image Layers
 
-* Efficieny Filesystems
+Shell:
 
-- unionining filesystems (aufs, overlayfs)
+  FROM ubuntu:14.04
+  RUN apt-get install -y mysql-server python-dev python-virtualenv git
+  RUN virtualenv 
+  RUN git clone https://github.com/myproject/mycode.git
+  RUN python mycode/setup.py install
+
+* Image Layer via Filesystems
+
+- union filesystems (aufs, overlayfs)
 
 - snapshotting cow filesystems (btrfs, zfs)
 
 - cow via lvm/device mapper with thin provisioning
 
+.image docker/unionfs.png
 
-* Efficiency storage
+* Compare to VMs
 
- - provisiniong takes a few miliseconds
+.image docker/docker-vm-vs-container.png
 
- - ... and a few kilobytes
+* Efficiency == Productivity
 
- - new images / bases take a few seconds
+- Containers in Seconds
 
+- VMs in Minutes
+
+- Kbs for a new containers vs. Gb for VMs
+
+- Easy sharing
 
 
 * Docker
 
- - opensource engine to commoditize containers
+- opensource engine to commoditize containers / April 2013
 
- - massive uptake / popularized containers
+- massive uptake / it has popularized containers
 
- - rich ecosystem of tools on top
+- rich ecosystem of tools on top
+
+- targets application containers
+
+Previous: Solaris Zones, FreeBSD Jails, LXC
+
+* Docker components
+
+.image docker/components.png
 
 
-* Docker Components
+* Docker Tutorial
+
+ https://www.docker.com/tryit/
+
+* Dockerfiles
+
+Best Practice to build an Image
+
+.code docker/SimpleDockerFile
+
+docker build . -t me/myapp:20150519
+docker push me/myapp:20150519
 
 
- ..
+* Docker Image URL
+
+ owner/image:tag
+
+There's a set of official images which don't have 'owner'
+
+.link https://github.com/docker-library/official-images/tree/master/library
+
+ie. ubuntu, mysql, golang, python, ruby, nodejs
+
+Use tag to version, implicit version is latest
+
+* Docker Compose
+
+- Use Links to connect containers
+
+.link https://docs.docker.com/userguide/dockerlinks/
+
+- Use compose to fire up multiple containers
+
+.code docker/compose.yaml
+
+  $ docker-compose up
+  Pulling image redis...
+  Building web...
+  Starting composetest_redis_1...
+  Starting composetest_web_1...
+  redis_1 | [8] 02 Jan 18:43:35.576 # Server started, Redis version 2.8.3
+  web_1   |  * Running on http://0.0.0.0:5000/
+
+* Storage / Volumes
+
+- Data Volumes
+
+- Bind mount directories
 
 
-* Management Engines
+* Hosted Containers
+
+- Google (GKE)
+
+- Amazon (ECS)
+
+- Tutum.co
+
+
+* Multi-Host Networking
+
+Default each container gets a private address address behind NAT
+bridge.
+
+- Port Forward and Host Networking (-p)
+
+- Flannel
+
+- Weave
+
+
+* Opensource Management Engines
 
  - Kubernetes
 
@@ -138,7 +258,9 @@ Almost no overhead
 * Other container engines
 
  - Rkt (Rocket) from CoreOS
-   - standardize image format
+   - standards based image format
+   - no daemon
+   - containers run directly under pid 1
 
  - LXC
    - grandpa of contaniners (along with openvz)
@@ -146,7 +268,9 @@ Almost no overhead
    - support for image templates and images.
    
  - LXD
-  - golang api
+  - os containers
+  - image based
+  - rest api daemon
 
 
 

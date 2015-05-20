@@ -499,21 +499,23 @@ select statement to multiplex over multiple channels
 * Where to go from here
 
 Links for new go programmers
+
 .link http://dave.cheney.net/resources-for-new-go-programmers
 
 Learn Go:
+
 .link http://tour.golang.org 
 
 Go By Example
+
 .link https://gobyexample.com/
 
 Documentation and articles:
+
 .link http://golang.org/doc
 
-Standard library reference:
-.link http://golang.org/pkg
-
 Talks
+
 .link http://talks.golang.org
 
 

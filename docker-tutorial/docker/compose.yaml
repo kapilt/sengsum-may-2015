@@ -7,4 +7,4 @@ web:
   volumes:
     - .:/code
 redis:
-  image: redis
+  image: redi*s
