@@ -1,0 +1,7 @@
+FROM ubuntu:14.04
+RUN apt-get install -y python-dev python-pip
+WORKDIR /code
+ADD requirements.txt /code/
+RUN pip install -r requirements.txt
+ADD . /code
+CMD python app.py
